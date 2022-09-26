@@ -34,6 +34,7 @@ public class NoteServlet extends HttpServlet {
             
             note = new Note(title, content);
             request.setAttribute("note", note);
+            br.close();
         }
         
 
