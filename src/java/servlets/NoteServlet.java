@@ -3,7 +3,6 @@ package servlets;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,15 +26,17 @@ public class NoteServlet extends HttpServlet {
         Note note;
         //text path
         String path = getServletContext().getRealPath("/WEB-INF/note.txt");
-        try ( //read files
-                BufferedReader br = new BufferedReader(new FileReader(new File(path)))) {
-            String title = br.readLine();
-            String content = br.readLine();
-            
-            note = new Note(title, content);
-            request.setAttribute("note", note);
-            br.close();
-        }
+        //read files
+        BufferedReader br = new BufferedReader(new FileReader(new File(path)));
+        
+         String title = br.readLine();
+         String content = br.readLine();
+         
+       
+        note = new Note(title, content);
+        request.setAttribute("note", note);
+
+        br.close();
         
 
         if (request.getParameter("edit") == null) {
@@ -51,20 +52,22 @@ public class NoteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Note note;
+        Note note2;
         //text path
         String path = getServletContext().getRealPath("/WEB-INF/note.txt");
-        try ( //Write files
-                PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(path, false)))) {
-            String title = request.getParameter("title");
-            String content = request.getParameter("content");
-            
-            pw.println(title);
-            pw.println(content);
-            
-            note = new Note(title, content);
-            request.setAttribute("note", note);
-        }
+        //Write files
+        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(path, false)));
+
+        String title = request.getParameter("title");
+        String content = request.getParameter("content");
+
+        pw.println(title);
+        pw.println(content);
+
+        note2 = new Note(title, content);
+        request.setAttribute("note", note2);
+
+        pw.close();
 
         getServletContext().getRequestDispatcher("/WEB-INF/viewnote.jsp").forward(request, response);
     }
